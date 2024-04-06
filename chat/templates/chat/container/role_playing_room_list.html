@@ -1,0 +1,35 @@
+{% extends 'container/base.html' %}
+
+{% block content %}
+    <table class="table table-hover tabel-bordered">
+        <thead>
+            <tr>      
+                <th>언어</th>
+                <th>레벨</th>
+                <th>상황</th>
+                <th>내 역할</th>
+                <th>GPT 역할</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for object in object_list %}
+                <tr>
+                    <td>{{ object.get_language_display }}</td>
+                    <td>{{ object.get_level_display }}</td>
+                    <td>
+                        <a href="">
+                            {{ object.situation }}
+                        </a>
+                    </td>
+                    <td>{{ object.my_role }}</td>
+                    <td>{{ object.gpt_role }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">Empty</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}
