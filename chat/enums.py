@@ -1,4 +1,4 @@
-from django.db.models import TextChoices
+from django.db.models import TextChoices, IntegerChoices
 from django.utils.translation import gettext_lazy as _
 
 
@@ -14,7 +14,7 @@ class LanguageEnum(TextChoices):
     RUSSIAN = 'ru-RU', _('Russian')
 
 
-class LevelEnum(TextChoices):
+class LevelEnum(IntegerChoices):
     ''' 상황극 채팅방 레벨 구분 클래스  '''
 
     BEGINNER = 1, _('초급')
