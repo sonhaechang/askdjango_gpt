@@ -1,9 +1,11 @@
+from typing import Any
 from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models.query import QuerySet
 from django.forms import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 
 from chat.forms import RolePlayingRoomForm
 from chat.models import RolePlayingRoom
@@ -20,3 +22,16 @@ class RolePlayingRoomCreateView(CreateView):
         role_playing_room = form.save(commit=False)
         role_playing_room.user = self.request.user
         return super().form_valid(form)
+    
+
+@method_decorator(staff_member_required, name='dispatch')
+class RolePlayingRoomUpdateView(UpdateView):
+    model = RolePlayingRoom
+    form_class = RolePlayingRoomForm
+    template_name = 'chat/container/update_role_playing_room.html'
+
+    def get_queryset(self) -> QuerySet[Any]:
+        qs = super().get_queryset()
+        qs = qs.filter(user=self.request.user)
+
+        return qs
