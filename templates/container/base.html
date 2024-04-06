@@ -1,0 +1,35 @@
+{% load django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>
+            {% block title %}
+                장고 채널스와 함께 ChatGPT 영어 상황극 채팅 서비스 만들기
+            {% endblock %}
+        </title>
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% block extra-css %}{% endblock %}
+    </head>
+
+    <body>
+        {% include 'container/header.html' %}
+
+        <div class="container">
+            {% bootstrap_messages %}
+
+            {% block content %}
+            {% endblock %}
+
+            {% include 'container/footer.html' %}
+
+            {% block script %}
+            {% endblock %}
+        </div>
+    </body>
+</html>
