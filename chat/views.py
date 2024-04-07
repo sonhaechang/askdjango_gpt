@@ -1,11 +1,21 @@
 from typing import Any
+
+from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models.query import QuerySet
 from django.forms import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.utils.translation import gettext_lazy as _
+from django.views.generic import (
+    CreateView,
+    UpdateView,
+    ListView,
+    DetailView,
+    DeleteView,
+)
 
 from chat.forms import RolePlayingRoomForm
 from chat.models import RolePlayingRoom
@@ -61,3 +71,22 @@ class RolePlayingRoomUpdateView(UpdateView):
         qs = qs.filter(user=self.request.user)
 
         return qs
+    
+
+@method_decorator(staff_member_required, name='dispatch')
+class RolePlayingRoomDeleteView(DeleteView):
+    model = RolePlayingRoom
+    success_url = reverse_lazy('chat:role_playing_room_list')
+    template_name = 'chat/container/role_playing_room_confirm_delete.html'
+
+    def get_queryset(self) -> QuerySet[Any]:
+        qs = super().get_queryset()
+        qs = qs.filter(user=self.request.user)
+
+        return qs
+    
+    def form_valid(self, form: Any) -> HttpResponse:
+        response = super().form_valid(form)
+        messages.success(self.request, _('채팅방을 삭제했습니다.'))
+
+        return response
