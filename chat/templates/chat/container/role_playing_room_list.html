@@ -17,7 +17,7 @@
                     <td>{{ object.get_language_display }}</td>
                     <td>{{ object.get_level_display }}</td>
                     <td>
-                        <a href="">
+                        <a href="{% url 'chat:role_playing_room_detail' object.pk %}">
                             {{ object.situation }}
                         </a>
                     </td>

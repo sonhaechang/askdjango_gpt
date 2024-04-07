@@ -2,12 +2,17 @@
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
         <a href="/"
            class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-            <span class="fs-4">장고 채널스와 함께 ChatGPT 영어 상황극 채팅 서비스 만들기</span>
+            <span class="fs-4">
+                장고 채널스와 함께 ChatGPT 영어 상황극 채팅 서비스 만들기
+            </span>
         </a>
 
         <ul class="nav nav-pills">
             <li class="nav-item">
-                <a href="#" class="nav-link active">새 상황 만들기</a>
+                <a href="{% url 'chat:role_playing_room_new' %}" 
+                class="nav-link active">
+                    새 상황 만들기
+                </a>
             </li>
         </ul>
     </header>

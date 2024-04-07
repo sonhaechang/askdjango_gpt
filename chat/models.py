@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from chat.enums import LanguageEnum, LevelEnum
@@ -77,3 +78,9 @@ class RolePlayingRoom(models.Model):
         verbose_name = _('상항극 채팅방')
         verbose_name_plural = _('상항극 채팅방')
         ordering = ('-id',)
+
+    def __str__(self) -> str:
+        return self.situation
+
+    def get_absolute_url(self) -> str:
+        return reverse('chat:role_playing_room_detail', args=[self.pk])
