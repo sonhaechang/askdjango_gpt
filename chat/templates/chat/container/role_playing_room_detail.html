@@ -77,7 +77,7 @@
             const messageList = document.getElementById('chat-message-list');
             const messageElement = document.createElement('li');
 
-            messageElement.className = 'chat-message' + (isMe ? 'me' : '');
+            messageElement.className = 'chat-message' + (isMe ? ' me' : '');
             messageElement.innerHTML = `<span class='message'>${message}</span>`;
             messageList.appendChild(messageElement);
             messageList.scrollTop = messageList.scrollHeight;
@@ -113,7 +113,13 @@
             const message = e.target.message.value.trim();
 
             if (message.length > 0) {
-                ws.send(JSON.stringify({ message: message }));
+                addMessage(message, true);
+
+                ws.send(JSON.stringify({ 
+                    type: 'user-message',
+                    message: message 
+                }));
+
                 e.target.reset();
             }
         }
