@@ -44,6 +44,10 @@
 
                 <div class="card-footer">
                     <div class="d-flex gap-2">
+                        <button id="recommend-button" class="btn btn-secondary">
+                            추천받기
+                        </button>
+
                         <form id="message-form" class="d-flex gap-1 flex-grow-1">
                             <input type="text"
                                 name="message"
@@ -99,7 +103,12 @@
                 const { message } = messageObj;
                 console.log('assistant-message :', messageObj);
                 addMessage(message, false);
-            } else {
+            } else if (messageObj.type === 'recommended-message') { 
+                const { message } = messageObj;
+                console.log('recommended-message :', message);
+                document.querySelector("#message-form [name='message']").value = message;
+                recommendButton.disabled = false;
+            }else {
                 console.error('알 수 없는 메시지 타입입니다.', messageObj);
             }
 
@@ -122,6 +131,13 @@
 
                 e.target.reset();
             }
-        }
+        };
+
+        const recommendButton = document.getElementById('recommend-button');
+        recommendButton.onclick = function(e) {
+            e.target.disabled = true;
+            ws.send(JSON.stringify({ type: 'request-recommend-message' }));
+        };
+
     </script>
 {% endblock %}
