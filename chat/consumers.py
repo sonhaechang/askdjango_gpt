@@ -26,7 +26,7 @@ class RolePlayingRoomConsumer(JsonWebsocketConsumer):
 
             assistant_message = self.get_query()
             self.send_json({
-                'type': 'assistant_message',
+                'type': 'assistant-message',
                 'message': assistant_message,
             })
 
