@@ -11,4 +11,5 @@ urlpatterns = [
     path('<int:pk>/', views.RolePlayingRoomDetailView.as_view(), name='role_playing_room_detail'),
     path('<int:pk>/edit/', views.RolePlayingRoomUpdateView.as_view(), name='role_playing_room_edit'),
     path('<int:pk>/delete/', views.RolePlayingRoomDeleteView.as_view(), name='role_playing_room_delete'),
+    path('voice/', views.make_voice, name='make_voice'),
 ]

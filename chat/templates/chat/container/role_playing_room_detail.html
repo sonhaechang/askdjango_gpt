@@ -56,8 +56,6 @@
                         </button>
                     </div>
 
-                    <select id="voice-list" class="form-select mb-2"></select>
-
                     <div class="d-flex gap-2">
                         <button id="recommend-button" class="btn btn-secondary">
                             추천받기
@@ -93,21 +91,12 @@
     {{ role_playing_room.language|json_script:'room-language' }}
 
     <script>
-       function sayMessage(message) {
-            const voiceListSelect = document.querySelector('#voice-list');
-            const voiceName = voiceListSelect.options[voiceListSelect.selectedIndex].value;
-            const voice = window.speechSynthesis.getVoices()
-                .find(voice => voice.name === voiceName);
-
-            const utterance = new SpeechSynthesisUtterance(message);
-            utterance.voice = voice;
-            utterance.lang = voice.lang;
-
-            utterance.addEventListener('error', (e) => {
-                alert(`error: ${e.error}`);
-            });
-
-            window.speechSynthesis.speak(utterance);
+       function sayMessage(message, language) {
+            const lang = language.split('-')[0]; // en-US => en
+            const voiceUrl = `/voice/?message=${encodeURIComponent(message)}&lang=${lang}`;
+            const audio = new Audio();
+            audio.src = voiceUrl;
+            audio.play();
         };
 
         function addMessage(message, isMe) {
@@ -123,7 +112,7 @@
             messageList.scrollTop = messageList.scrollHeight;
 
             messageElement.querySelector('.say').onclick = function(e) {
-                sayMessage(message);
+                sayMessage(message, roomLanguage);
             };
         };
 
@@ -146,7 +135,7 @@
                 console.log('assistant-message :', messageObj);
                 addMessage(message, false);
 
-                if ( isAutoPlay ) sayMessage(message);
+                if ( isAutoPlay ) sayMessage(message, roomLanguage);
 
             } else if (messageObj.type === 'recommended-message') { 
                 const { message } = messageObj;
@@ -184,19 +173,6 @@
             ws.send(JSON.stringify({ type: 'request-recommend-message' }));
         };
 
-        window.speechSynthesis.onvoiceschanged = function() {
-            const voices = window.speechSynthesis.getVoices();
-
-            voices.forEach(({ name, lang }) => {
-                if ( lang.toLocaleLowerCase() === roomLanguage.toLocaleLowerCase()) {
-                    const option = document.createElement('option');
-                    option.value = name;
-                    option.textContent = name;
-                    option.selected = true;
-                    document.querySelector('#voice-list').appendChild(option);
-                }
-            });
-        };
 
         const autoPlayButton = document.querySelector('#auto-play-button');
 

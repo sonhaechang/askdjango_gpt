@@ -20,6 +20,8 @@ from django.views.generic import (
 from chat.forms import RolePlayingRoomForm
 from chat.models import RolePlayingRoom
 
+from gtts import gTTS
+
 
 # Create your views here.
 @method_decorator(staff_member_required, name='dispatch')
@@ -90,3 +92,15 @@ class RolePlayingRoomDeleteView(DeleteView):
         messages.success(self.request, _('채팅방을 삭제했습니다.'))
 
         return response
+    
+    
+@staff_member_required
+def make_voice(request) -> HttpResponse:
+    lang = request.GET.get('lang', 'en')
+    message = request.GET.get('message')
+
+    response = HttpResponse()
+    gTTS(message, lang=lang).write_to_fp(response)
+    response['Content-Type'] = 'audio/mpeg'
+
+    return response
